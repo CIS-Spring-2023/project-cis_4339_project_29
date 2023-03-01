@@ -75,6 +75,16 @@ export default {
                 Find Event
               </router-link>
             </li>
+            <li>
+              <router-link to="/login">
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  >search</span
+                >
+                login
+              </router-link>
+            </li>
           </ul>
         </nav>
       </header>
