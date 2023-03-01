@@ -3,7 +3,7 @@
 </script>
 
 <template>
-    <h1>Hi</h1>
+    <h1>Test Merge</h1>
 </template>
 
 <style scoped>
