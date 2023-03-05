@@ -45,6 +45,11 @@ const routes = [
     name: 'login',
     component: () => import('../components/login.vue')
   },
+  {
+    path: '/findservice',
+    name: 'findservice',
+    component: () => import('../components/findService.vue')
+  },
 ]
 const router = createRouter({
   history: createWebHistory(),
