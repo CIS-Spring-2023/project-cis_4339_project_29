@@ -46,9 +46,14 @@ const routes = [
     component: () => import('../components/login.vue')
   },
   {
-    path: '/findservice',
-    name: 'findservice',
-    component: () => import('../components/findService.vue')
+    path: '/findservices',
+    name: 'findservices',
+    component: () => import('../components/findServices.vue')
+  },
+  {
+    path: '/createservices',
+    name: 'createservices',
+    component: () => import('../components/createServices.vue')
   },
 ]
 const router = createRouter({
