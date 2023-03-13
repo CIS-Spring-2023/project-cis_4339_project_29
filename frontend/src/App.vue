@@ -1,6 +1,8 @@
 <script>
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
+import { useAuthStore } from "@/store/auth"
+
 
 export default {
   name: 'App',
@@ -9,16 +11,23 @@ export default {
       orgName: 'Dataplatform'
     }
   },
+  setup() {
+    const authStore = useAuthStore();
+    return { authStore };
+  },
   created() {
     axios.get(`${apiURL}/org`).then((res) => {
       this.orgName = res.data.name
     })
-  }
+  },
 }
 </script>
+
 <template>
+
   <main class="flex flex-row">
-    <div id="_container" class="h-screen">
+    
+    <div  id="_container" class="h-screen">
       <header class="w-full">
         <section class="text-center">
           <img class="m-auto" src="@\assets\DanPersona.svg" />
@@ -35,7 +44,7 @@ export default {
                 Dashboard
               </router-link>
             </li>
-            <li>
+            <li v-show="authStore.isAuth">
               <router-link to="/intakeform">
                 <span
                   style="position: relative; top: 6px"
@@ -45,7 +54,7 @@ export default {
                 Client Intake Form
               </router-link>
             </li>
-            <li>
+            <li v-show="authStore.isAuth">
               <router-link to="/eventform">
                 <span
                   style="position: relative; top: 6px"
@@ -55,7 +64,7 @@ export default {
                 Create Event
               </router-link>
             </li>
-            <li>
+            <li v-show="authStore.isAuth">
               <router-link to="/createservices">
                 <span
                   style="position: relative; top: 6px"
@@ -95,7 +104,7 @@ export default {
                 Find Services
               </router-link>
             </li>
-            <li>
+            <li v-if="!authStore.isAuth">
               <router-link to="/login">
                 <span
                   style="position: relative; top: 6px"
@@ -104,6 +113,23 @@ export default {
                 >
                 login
               </router-link>
+            </li>
+            <li v-if="authStore.isAuth">
+              <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  ></span
+                >
+                <button @click="authStore.isAuth = false">Logout</button>
+            </li>
+            <li v-if="authStore.isAuth">
+  
+                <span
+                  style="position: relative; top: 6px"
+                  class="material-icons"
+                  ></span
+                >
+                Welcome {{authStore.user.name}}
             </li>
           </ul>
         </nav>

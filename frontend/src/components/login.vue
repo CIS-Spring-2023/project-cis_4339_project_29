@@ -57,6 +57,7 @@
 </template>
 
 <script>
+import { useAuthStore } from "@/store/auth"
 export default {
   data() {
     return {
@@ -65,6 +66,10 @@ export default {
       showErrorMessage: false,
       errorMessage: '',
     }
+  },
+  setup() {
+    const authStore = useAuthStore();
+    return { authStore };
   },
   computed: {
     emailIsValid() {
@@ -83,9 +88,10 @@ export default {
   methods: {
     submitForm() {
       // Check email and password
-      if (this.email === 'reh2ro@gmail.com' && this.password === 'Robert39') {
+      if (this.email === 'user1234@gmail.com' && this.password === 'User1234') {
         // Redirect to welcome page
-        this.$router.push('/')
+        this.$router.push('/') 
+        return useAuthStore().isAuth = true
       } else {
     // Display error message when password is incorrect
     alert('Incorrect email or password.')
