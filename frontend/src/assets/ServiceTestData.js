@@ -1,4 +1,4 @@
-export const doughnutchartData = {
+export const serviceData = {
   [
     {name: "Service A", provName: "Tim Shock", active: true},
     {name: "Helping People", provName: "Lighting Tony", active: false},
@@ -7,4 +7,4 @@ export const doughnutchartData = {
     {name: "Tiny Kings", provName: "Sett Seed", active: true},
   ]
     };
-  export default doughnutchartData;
+  export default serviceData;
