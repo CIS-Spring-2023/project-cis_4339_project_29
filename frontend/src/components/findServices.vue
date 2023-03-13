@@ -8,29 +8,28 @@ export default {
       queryData: [],
       // Parameter for search to occur
       searchBy: '',
-      firstName: '',
-      lastName: '',
-      phoneNumber: ''
+      serviceName: '',
+      providerName: '',
     }
   },
   created() {
-    this.getClients()
+    this.getServices()
   },
   methods: {
     handleSubmitForm() {
       let endpoint = ''
-      if (this.searchBy === 'Client Name') {
-        endpoint = `clients/search/?firstName=${this.firstName}&lastName=${this.lastName}&searchBy=name`
-      } else if (this.searchBy === 'Client Number') {
-        endpoint = `clients/search/?phoneNumber.primary=${this.phoneNumber}&searchBy=number`
+      if (this.searchBy === 'Service Name') {
+        endpoint = `services/search/?serviceName=${this.serviceName}&searchBy=name`
+      } else if (this.searchBy === 'providerName') {
+        endpoint = `services/search/?providerName=${this.providerName}&searchBy=provName`
       }
       axios.get(`${apiURL}/${endpoint}`).then((res) => {
         this.queryData = res.data
       })
     },
-    // abstract get clients call
-    getClients() {
-      axios.get(`${apiURL}/clients`).then((res) => {
+    // abstract get services call
+    getServices() {
+      axios.get(`${apiURL}/services`).then((res) => {
         this.queryData = res.data
       })
       window.scrollTo(0, 0)
@@ -38,15 +37,14 @@ export default {
     clearSearch() {
       // Resets all the variables
       this.searchBy = ''
-      this.firstName = ''
-      this.lastName = ''
-      this.phoneNumber = ''
+      this.serviceName = ''
+      this.providerName = ''
 
       // get all entries
-      this.getClients()
+      this.getServices()
     },
-    editClient(clientID) {
-      this.$router.push({ name: 'updateclient', params: { id: clientID } })
+    editService(serviceID) {
+      this.$router.push({ name: 'updateclient', params: { id: serviceID } })
     }
   }
 }
@@ -71,40 +69,29 @@ export default {
             class="rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             v-model="searchBy"
           >
-            <option value="Client Name">Service Name</option>
-            <option value="Client Number">Service Number</option>
+            <option value="Service Name">Service Name</option>
+            <option value="Provider Name">Provider Name</option>
           </select>
         </div>
-        <div class="flex flex-col" v-if="searchBy === 'Client Name'">
+        <div class="flex flex-col" v-if="searchBy === 'Service Name'">
           <label class="block">
             <input
               type="text"
               class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
               v-model="firstName"
               v-on:keyup.enter="handleSubmitForm"
-              placeholder="Enter first name"
-            />
-          </label>
-        </div>
-        <div class="flex flex-col" v-if="searchBy === 'Client Name'">
-          <label class="block">
-            <input
-              type="text"
-              class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              v-model="lastName"
-              v-on:keyup.enter="handleSubmitForm"
-              placeholder="Enter last name"
+              placeholder="Enter Service name"
             />
           </label>
         </div>
         <!-- Displays Client Number search field -->
-        <div class="flex flex-col" v-if="searchBy === 'Client Number'">
+        <div class="flex flex-col" v-if="searchBy === 'Provider Name'">
           <input
             class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             type="text"
             v-model="phoneNumber"
             v-on:keyup.enter="handleSubmitForm"
-            placeholder="Enter Client Phone Number"
+            placeholder="Enter Provider Name"
           />
         </div>
       </div>
@@ -126,7 +113,7 @@ export default {
             @click="handleSubmitForm"
             type="submit"
           >
-            Search Client
+            Search Services
           </button>
         </div>
       </div>
@@ -138,21 +125,21 @@ export default {
       class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-10"
     >
       <div class="ml-10">
-        <h2 class="text-2xl font-bold">List of Clients</h2>
+        <h2 class="text-2xl font-bold">List of Services</h2>
         <h3 class="italic">Click table row to edit/display an entry</h3>
       </div>
       <div class="flex flex-col col-span-2">
         <table class="min-w-full shadow-md rounded">
           <thead class="bg-gray-50 text-xl">
             <tr>
-              <th class="p-4 text-left">Name</th>
-              <th class="p-4 text-left">Phone number</th>
-              <th class="p-4 text-left">City</th>
+              <th class="p-4 text-left">Service Name</th>
+              <th class="p-4 text-left">Provider Name</th>
+              <th class="p-4 text-left">Active</th>
             </tr>
           </thead>
           <tbody class="divide-y divide-gray-300">
             <tr
-              @click="editClient(client._id)"
+              @click="editService(service._id)"
               v-for="client in queryData"
               :key="client._id"
             >

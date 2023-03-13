@@ -13,30 +13,27 @@ export default {
       // removed unnecessary extra array to track services
       event: {
         name: '',
-        services: [],
-        date: '',
-        address: {
-          line1: '',
-          line2: '',
-          city: '',
-          county: '',
-          zip: ''
-        },
-        description: ''
+        provName: '',
+        description: '',
+        active: false
       }
     }
   },
   methods: {
     async handleSubmitForm() {
+      // console.log('sending')
+      // console.log(this.event)
+
       // Checks to see if there are any errors in validation
       const isFormCorrect = await this.v$.$validate()
       // If no errors found. isFormCorrect = True then the form is submitted
       if (isFormCorrect) {
+        // console.log('verified')
         axios
-          .post(`${apiURL}/events`, this.event)
+          .post(`${apiURL}/services`, this.event)
           .then(() => {
-            alert('Event has been added.')
-            this.$router.push({ name: 'findevents' })
+            alert('Service has been added.')
+            this.$router.push({ name: 'findservices' })
           })
           .catch((error) => {
             console.log(error)
@@ -49,7 +46,8 @@ export default {
     return {
       event: {
         name: { required },
-        provName: { required }
+        provName: { required },
+        active: { required }
       }
     }
   }
@@ -99,26 +97,30 @@ export default {
           <div></div>
           <div></div>
           <!-- form field -->
-          <div class="flex flex-col">
+          <div class="flex flex-col col-span-2">
             <label class="block">
               <span class="text-gray-700">Description</span>
               <textarea
                 class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-                rows="2"></textarea>
+                rows="2"
+                v-model="event.description"></textarea>
             </label>
           </div>
 
-          <div class="flex flex-col">
+          <div></div>
+          <div></div>
+          <div class="flex flex-col col-span-2">
             <label class="block">
-              <span class="text-gray-700">Provider Name</span>
+              <span class="text-gray-700">Service Available</span>
               <span style="color: #ff0000">*</span>
             </label>
             <label class="relative inline-flex items-center cursor-pointer">
-              <input type="checkbox" value="" class="sr-only peer">
+              <input type="checkbox" v-model="event.active" class="sr-only peer">
               <div
                 class="w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:left-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600">
               </div>
-              <span class="ml-3 text-sm font-medium text-gray-900 dark:text-gray-300">Large toggle</span>
+              <span v-if="event.active" class="ml-3 text-sm font-medium text-green-600 dark:text-green-600">Active</span>
+              <span v-else class="ml-3 text-sm font-medium text-red-600 dark:text-red-600">Inactive</span>
             </label>
           </div>
 
@@ -126,6 +128,11 @@ export default {
           <div></div>
           <div></div>
           <!-- form field -->
+        </div>
+        <div class="flex justify-between mt-10 mr-20">
+          <button class="bg-red-700 text-white rounded" type="submit">
+            Add New Service
+          </button>
         </div>
       </form>
     </div>
