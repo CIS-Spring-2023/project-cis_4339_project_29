@@ -46,7 +46,9 @@ export default {
       this.getClients()
     },
     editClient(clientID) {
+      if(useAuthStore().isAuth == true){
       this.$router.push({ name: 'updateclient', params: { id: clientID } })
+      }
     }
   }
 }

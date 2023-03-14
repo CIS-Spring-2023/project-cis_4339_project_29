@@ -67,7 +67,9 @@ export default {
     },
     // method to allow click through table to event details
     editEvent(eventID) {
+      if(useAuthStore().isAuth == true){
       this.$router.push({ name: 'eventdetails', params: { id: eventID } })
+      }
     }
   }
 }
