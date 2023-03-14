@@ -2,6 +2,7 @@
 import axios from 'axios'
 import serviceData from '../assets/ServiceTestData.js';
 const apiURL = import.meta.env.VITE_ROOT_API
+import { useAuthStore } from "@/store/auth"
 
 export default {
   data() {
@@ -48,7 +49,9 @@ export default {
       this.getServices()
     },
     editService(serviceID) {
+      if(useAuthStore().isAuth == true){
       this.$router.push({ name: 'updateservice', params: { id: serviceID } })
+      }
     }
   }
 }

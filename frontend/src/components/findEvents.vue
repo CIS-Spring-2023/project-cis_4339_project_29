@@ -2,6 +2,7 @@
 import { DateTime } from 'luxon'
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
+import { useAuthStore } from "@/store/auth"
 
 export default {
   data() {
@@ -53,7 +54,9 @@ export default {
       this.getEvents()
     },
     editEvent(eventID) {
+      if(useAuthStore().isAuth == true){
       this.$router.push({ name: 'eventdetails', params: { id: eventID } })
+      }
     }
   }
 }

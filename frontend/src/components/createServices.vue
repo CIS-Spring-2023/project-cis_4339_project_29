@@ -123,6 +123,11 @@ export default {
               <span v-else class="ml-3 text-sm font-medium text-red-600 dark:text-red-600">Inactive</span>
             </label>
           </div>
+          <div class="flex justify-between mt-10 mr-20">
+          <button class="bg-red-700 text-white rounded" type="submit">
+            Add New Service
+          </button>
+        </div>
 
           <div></div>
           <div></div>

@@ -1,7 +1,7 @@
 <script>
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
-
+import { useAuthStore } from "@/store/auth"
 export default {
   data() {
     return {
@@ -46,7 +46,9 @@ export default {
       this.getClients()
     },
     editClient(clientID) {
+      if(useAuthStore().isAuth == true){
       this.$router.push({ name: 'updateclient', params: { id: clientID } })
+      }
     }
   }
 }

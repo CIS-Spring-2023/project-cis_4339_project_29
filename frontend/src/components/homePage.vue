@@ -3,6 +3,7 @@ import { DateTime } from 'luxon';
 import axios from 'axios';
 import AttendanceChart from './barChart.vue'
 import doughnutChart from '@/components/doughnutChart.vue';
+import { useAuthStore } from "@/store/auth"
 
 const apiURL = import.meta.env.VITE_ROOT_API
 
@@ -67,7 +68,9 @@ export default {
     },
     // method to allow click through table to event details
     editEvent(eventID) {
+      if(useAuthStore().isAuth == true){
       this.$router.push({ name: 'eventdetails', params: { id: eventID } })
+      }
     }
   }
 }

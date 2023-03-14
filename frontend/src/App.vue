@@ -114,13 +114,16 @@ export default {
                 login
               </router-link>
             </li>
+            
             <li v-if="authStore.isAuth">
+              <router-link to="/">
               <span
                   style="position: relative; top: 6px"
                   class="material-icons"
                   ></span
                 >
                 <button @click="authStore.isAuth = false">Logout</button>
+                </router-link>
             </li>
             <li v-if="authStore.isAuth">
   
