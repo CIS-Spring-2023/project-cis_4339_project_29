@@ -1,5 +1,6 @@
 <script>
 import axios from 'axios'
+import serviceData from '../assets/ServiceTestData.js';
 const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
@@ -29,10 +30,13 @@ export default {
     },
     // abstract get services call
     getServices() {
-      axios.get(`${apiURL}/services`).then((res) => {
-        this.queryData = res.data
-      })
+      //*For when BackEnd Implemented
+      // axios.get(`${apiURL}/services`).then((res) => {
+      //   this.queryData = res.data
+      // })
+      this.queryData = serviceData.testData;
       window.scrollTo(0, 0)
+
     },
     clearSearch() {
       // Resets all the variables
@@ -140,16 +144,16 @@ export default {
           <tbody class="divide-y divide-gray-300">
             <tr
               @click="editService(service._id)"
-              v-for="client in queryData"
-              :key="client._id"
+              v-for="service in queryData"
+              :key="service._id"
             >
               <td class="p-2 text-left">
-                {{ client.firstName + ' ' + client.lastName }}
+                {{ service.name }}
               </td>
               <td class="p-2 text-left">
-                {{ client.phoneNumber.primary }}
+                {{ service.provName }}
               </td>
-              <td class="p-2 text-left">{{ client.address.city }}</td>
+              <td class="p-2 text-left">{{ service.active }}</td>
             </tr>
           </tbody>
         </table>
