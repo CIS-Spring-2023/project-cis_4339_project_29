@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios'
 import serviceData from '../assets/ServiceTestData.js';
+import { useAuthStore } from "@/store/auth"
 const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
@@ -12,6 +13,10 @@ export default {
       serviceName: '',
       providerName: '',
     }
+  },
+  setup() {
+    const authStore = useAuthStore();
+    return { authStore };
   },
   created() {
     this.getServices()
@@ -143,7 +148,7 @@ export default {
           </thead>
           <tbody class="divide-y divide-gray-300">
             <tr
-              @click="editService(service._id)"
+              @click="authStore.isAuth ? editService(service._id) : null"
               v-for="service in queryData"
               :key="service._id"
             >

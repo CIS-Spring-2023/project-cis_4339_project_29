@@ -1,6 +1,7 @@
 <script>
 import axios from 'axios'
 const apiURL = import.meta.env.VITE_ROOT_API
+import { useAuthStore } from "@/store/auth"
 
 export default {
   data() {
@@ -12,6 +13,10 @@ export default {
       lastName: '',
       phoneNumber: ''
     }
+  },
+  setup() {
+    const authStore = useAuthStore();
+    return { authStore };
   },
   created() {
     this.getClients()
@@ -152,7 +157,7 @@ export default {
           </thead>
           <tbody class="divide-y divide-gray-300">
             <tr
-              @click="editClient(client._id)"
+              @click="authStore.isAuth ? editClient(client._id) : null"
               v-for="client in queryData"
               :key="client._id"
             >

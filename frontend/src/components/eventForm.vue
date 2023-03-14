@@ -2,6 +2,7 @@
 import useVuelidate from '@vuelidate/core'
 import { required } from '@vuelidate/validators'
 import axios from 'axios'
+import serviceData from '../assets/ServiceTestData.js';
 const apiURL = import.meta.env.VITE_ROOT_API
 
 export default {
@@ -47,9 +48,11 @@ export default {
       }
     },
     getServices() {
-      axios.get(`${apiURL}/services/active`).then((res) => {
-        this.queryData = res.data
-      })
+      //* Once Backend is implemented
+      // axios.get(`${apiURL}/services/active`).then((res) => {
+      //   this.queryData = res.data
+      // })
+      this.queryData = serviceData.testData
       window.scrollTo(0, 0)
     }
   },

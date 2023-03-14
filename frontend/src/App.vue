@@ -24,122 +24,79 @@ export default {
 </script>
 
 <template>
-
   <main class="flex flex-row">
-    
-    <div  id="_container" class="h-screen">
+
+    <div id="_container" class="h-screen">
       <header class="w-full">
         <section class="text-center">
           <img class="m-auto" src="@\assets\DanPersona.svg" />
         </section>
         <nav class="mt-10">
           <ul class="flex flex-col gap-4">
+            <li v-if="authStore.isAuth">
+
+              <span style="position: relative; top: 6px" class="material-icons"></span>
+              Welcome {{ authStore.user.name }}
+            </li>
+            <li v-if="!authStore.isAuth">
+              <router-link to="/login">
+                <span style="position: relative; top: 6px" class="material-icons">login</span>
+                login
+              </router-link>
+            </li>
             <li>
               <router-link to="/">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >dashboard</span
-                >
+                <span style="position: relative; top: 6px" class="material-icons">dashboard</span>
                 Dashboard
               </router-link>
             </li>
             <li v-show="authStore.isAuth">
               <router-link to="/intakeform">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >people</span
-                >
+                <span style="position: relative; top: 6px" class="material-icons">people</span>
                 Client Intake Form
               </router-link>
             </li>
             <li v-show="authStore.isAuth">
               <router-link to="/eventform">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >event</span
-                >
+                <span style="position: relative; top: 6px" class="material-icons">event</span>
                 Create Event
               </router-link>
             </li>
             <li v-show="authStore.isAuth">
               <router-link to="/createservices">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >event</span
-                >
+                <span style="position: relative; top: 6px" class="material-icons">event</span>
                 Create Services
               </router-link>
             </li>
             <li>
               <router-link to="/findclient">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >search</span
-                >
+                <span style="position: relative; top: 6px" class="material-icons">search</span>
                 Find Client
               </router-link>
             </li>
             <li>
               <router-link to="/findevents">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >search</span
-                >
+                <span style="position: relative; top: 6px" class="material-icons">search</span>
                 Find Event
               </router-link>
             </li>
             <li>
               <router-link to="/findservices">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >search</span
-                >
+                <span style="position: relative; top: 6px" class="material-icons">search</span>
                 Find Services
               </router-link>
             </li>
-            <li v-if="!authStore.isAuth">
-              <router-link to="/login">
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  >search</span
-                >
-                login
-              </router-link>
-            </li>
             <li v-if="authStore.isAuth">
-              <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  ></span
-                >
-                <button @click="authStore.isAuth = false">Logout</button>
-            </li>
-            <li v-if="authStore.isAuth">
-  
-                <span
-                  style="position: relative; top: 6px"
-                  class="material-icons"
-                  ></span
-                >
-                Welcome {{authStore.user.name}}
+              <span style="position: relative; top: 6px" class="material-icons"></span>
+              <button @click="authStore.isAuth = false">Logout</button>
             </li>
           </ul>
         </nav>
       </header>
     </div>
     <div class="grow w-4/5">
-      <section
-        class="justify-end items-center h-24 flex"
-        style="background: linear-gradient(250deg, #c8102e 70%, #efecec 50.6%)"
-      >
+      <section class="justify-end items-center h-24 flex"
+        style="background: linear-gradient(250deg, #c8102e 70%, #efecec 50.6%)">
         <h1 class="mr-20 text-3xl text-white">{{ this.orgName }}</h1>
       </section>
       <div>
