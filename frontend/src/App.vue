@@ -36,14 +36,20 @@ export default {
             <li v-if="authStore.isAuth">
 
               <span style="position: relative; top: 6px" class="material-icons"></span>
-              Welcome {{ authStore.user.name }}
+              Welcome {{ authStore.user.AdminName }}
             </li>
-            <li v-if="!authStore.isAuth">
+            <li v-if="authStore.isReader">
+
+              <span style="position: relative; top: 6px" class="material-icons"></span>
+              Welcome {{ authStore.user.ReaderName }}
+            </li>
+            <li v-if="!authStore.isAuth && !authStore.isReader">
               <router-link to="/login">
                 <span style="position: relative; top: 6px" class="material-icons">login</span>
                 login
               </router-link>
             </li>
+            
             <li>
               <router-link to="/">
                 <span style="position: relative; top: 6px" class="material-icons">dashboard</span>
@@ -62,33 +68,41 @@ export default {
                 Create Event
               </router-link>
             </li>
-            <li v-show="authStore.isAuth">
+            <li v-show="authStore.isAuth" >
               <router-link to="/createservices">
                 <span style="position: relative; top: 6px" class="material-icons">event</span>
                 Create Services
               </router-link>
             </li>
-            <li>
+            <li v-if="authStore.isAuth || authStore.isReader">
               <router-link to="/findclient">
                 <span style="position: relative; top: 6px" class="material-icons">search</span>
                 Find Client
               </router-link>
             </li>
-            <li>
+            <li v-if="authStore.isAuth || authStore.isReader">
               <router-link to="/findevents">
                 <span style="position: relative; top: 6px" class="material-icons">search</span>
                 Find Event
               </router-link>
             </li>
-            <li>
+            <li v-if="authStore.isAuth || authStore.isReader">
               <router-link to="/findservices">
                 <span style="position: relative; top: 6px" class="material-icons">search</span>
                 Find Services
               </router-link>
             </li>
             <li v-if="authStore.isAuth">
-              <span style="position: relative; top: 6px" class="material-icons"></span>
+              <router-link to="/">
+              <span style="position: relative; top: 6px" class="material-icons">logout</span>
               <button @click="authStore.isAuth = false">Logout</button>
+              </router-link>
+            </li>
+            <li v-if="authStore.isReader">
+              <router-link to="/">
+              <span style="position: relative; top: 6px" class="material-icons">logout</span>
+              <button @click="authStore.isReader = false">Logout</button>
+              </router-link>
             </li>
           </ul>
         </nav>

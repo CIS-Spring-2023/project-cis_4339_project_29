@@ -92,6 +92,11 @@ export default {
         // Redirect to welcome page
         this.$router.push('/') 
         return useAuthStore().isAuth = true
+      }
+      else if(this.email === 'reader1234@gmail.com' && this.password === 'Reader1234') {
+        // Redirect to welcome page
+        this.$router.push('/') 
+        return useAuthStore().isReader = true
       } else {
     // Display error message when password is incorrect
     alert('Incorrect email or password.')
