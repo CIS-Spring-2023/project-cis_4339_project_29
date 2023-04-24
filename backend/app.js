@@ -1,6 +1,9 @@
 const express = require('express')
 const mongoose = require('mongoose') //require mongoose library functionaility
 const morgan = require('morgan') // better debugging
+const Org = require('./models/orgsModel')
+const Client = require('./models/clients')
+const Event = require('./models/eventModel')
 
 const cors = require('cors')
 // allow using a .env file
@@ -34,9 +37,179 @@ app.use(express.json())
 app.use(morgan('dev'))
 
 // setup middle ware for routes
-app.use('/clients', require('./routes/clients'))
-app.use('/events', require('./routes/events'))
-app.use('/org', require('./routes/org'))
+
+// routes for org
+app.get('/org/:id', async(req,res) =>{
+  try {
+    const {id} = req.params;
+    const org = await Org.findById(id);
+    res.status(200).json(org)
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+})
+
+// Routes for Client
+//get all clients
+app.get('/client', async(req,res) =>{
+  try {
+    const client = await Client.find({})
+    res.status(200).json(client)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+//get client based off name
+app.get('/name/:searchName', async(req,res) =>{
+  try {
+    let name = await Client.find({
+      "$or":[
+        {firstName:{$regex:req.params.searchName}},
+        {lastName:{$regex:req.params.searchName}}
+      ]
+    })
+    res.status(200).json(name)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+//get client based off phone number
+app.get('/number/:pn', async(req,res) =>{
+  try {
+    const {pn} = req.params
+    const number = await Client.findOne({'phoneNumber.primary': pn})
+    res.status(200).json(number)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+
+//get client based off id
+app.get('/client/:id', async(req,res) =>{
+  try {
+    const {id} = req.params;
+    const client = await Client.findById(id);
+    res.status(200).json(client)
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+})
+
+//post client
+app.post('/client', async(req,res) =>{
+  try {
+    const client = await Client.create(req.body)
+    res.status(200).json(client)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+//update client
+app.put('/client/:id', async(req,res) =>{
+  try {
+    const {id} = req.params;
+    const client = await Client.findByIdAndUpdate(id, req.body)
+    if (!client){
+      return res.status(404).json({message: `can not find client with ID ${id}`})
+    }
+    res.status(200).json(client)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+//delete client
+app.delete('/client/:id', async(req,res) =>{
+  try {
+    const {id} = req.params;
+    const client = await Client.findByIdAndDelete(id);
+    if (!client){
+      return res.status(404).json({message: `can not find client with ID ${id}`})
+    }
+    res.status(200).json(client)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+// routes for events
+app.get('/event', async(req,res) =>{
+  try {
+    const event = await Event.find({})
+    res.status(200).json(event)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+
+//get event by id
+app.get('/event/:id', async(req,res) =>{
+  try {
+    const {id} = req.params;
+    const event = await Event.findById(id);
+    res.status(200).json(event)
+    console.log(event)
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+})
+
+//post event
+app.post('/event', async(req,res) =>{
+  try {
+    const event = await Event.create(req.body)
+    res.status(200).json(event)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+//update event
+app.put('/event/:id', async(req,res) => {
+  try {
+    const {id} = req.params;
+    const event = await Event.findByIdAndUpdate(id, req.body)
+    if (!event){
+      return res.status(404).json({message: `can not find event with ID ${id}`})
+    }
+    res.status(200).json(event)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+//delete event
+app.delete('/event/:id', async (req,res) =>{
+  try {
+    const {id} = req.params;
+    const event = await Event.findByIdAndDelete(id)
+    if (!event){
+      return res.status(404).json({message: `can not find event with ID ${id}`})
+    }
+    res.status(200).json(event)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+
+
+
 
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`)
