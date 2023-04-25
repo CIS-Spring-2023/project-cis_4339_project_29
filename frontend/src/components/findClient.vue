@@ -35,7 +35,7 @@ export default {
     },
     // abstract get clients call
     getClients() {
-      axios.get(`${apiURL}/clients`).then((res) => {
+      axios.get(`${apiURL}/client`).then((res) => {
         this.queryData = res.data
       })
       window.scrollTo(0, 0)

@@ -4,14 +4,15 @@ import serviceData from '../assets/ServiceTestData.js';
 import { useAuthStore } from "@/store/auth"
 const apiURL = import.meta.env.VITE_ROOT_API
 
+
 export default {
   data() {
     return {
       queryData: [],
       // Parameter for search to occur
       searchBy: '',
-      serviceName: '',
-      providerName: '',
+      name: '',
+      provName: '',
     }
   },
   setup() {
@@ -36,9 +37,9 @@ export default {
     // abstract get services call
     getServices() {
       //*For when BackEnd Implemented
-      // axios.get(`${apiURL}/services`).then((res) => {
-      //   this.queryData = res.data
-      // })
+       axios.get(`${apiURL}/service`).then((res) => {
+       this.queryData = res.data
+       })
       this.queryData = serviceData.testData;
       window.scrollTo(0, 0)
 

@@ -44,7 +44,7 @@ export default {
     },
     // abstracted method to get events
     getEvents() {
-      axios.get(`${apiURL}/events`).then((res) => {
+      axios.get(`${apiURL}/event`).then((res) => {
         this.events = res.data
       })
       window.scrollTo(0, 0)
