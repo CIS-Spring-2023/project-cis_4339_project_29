@@ -30,7 +30,7 @@ export default {
       if (isFormCorrect) {
         // console.log('verified')
         axios
-          .post(`${apiURL}/services`, this.event)
+          .post(`${apiURL}/service`, this.event)
           .then(() => {
             alert('Service has been added.')
             this.$router.push({ name: 'findservices' })

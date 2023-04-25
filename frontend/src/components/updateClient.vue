@@ -38,7 +38,7 @@ export default {
     }
   },
   created() {
-    axios.get(`${apiURL}/clients/id/${this.$route.params.id}`).then((res) => {
+    axios.get(`${apiURL}/client/${this.$route.params.id}`).then((res) => {
       // simplified setting client
       this.client = res.data
     })
@@ -78,7 +78,7 @@ export default {
       // If no errors found. isFormCorrect = True then the form is submitted
       if (isFormCorrect) {
         axios
-          .put(`${apiURL}/clients/update/${this.id}`, this.client)
+          .put(`${apiURL}/client/${this.id}`, this.client)
           .then(() => {
             alert('Update has been saved.')
             this.$router.back()
@@ -123,7 +123,7 @@ export default {
     },
     // unused hard delete method
     deleteClient() {
-      axios.delete(`${apiURL}/clients/${this.id}`).then(() => {
+      axios.delete(`${apiURL}/client/${this.id}`).then(() => {
         alert('Client has been deleted.')
         this.$router.push({ name: 'findclient' })
       })

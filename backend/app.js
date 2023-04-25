@@ -4,6 +4,8 @@ const morgan = require('morgan') // better debugging
 const Org = require('./models/orgsModel')
 const Client = require('./models/clients')
 const Event = require('./models/eventModel')
+const User = require('./models/userModle')
+const Service = require('./models/servicesModel')
 
 const cors = require('cors')
 // allow using a .env file
@@ -39,6 +41,16 @@ app.use(morgan('dev'))
 // setup middle ware for routes
 
 // routes for org
+
+app.get('/org', async(req,res) =>{
+  try {
+    const org = await Org.find({});
+    res.status(200).json(org)
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+})
+
 app.get('/org/:id', async(req,res) =>{
   try {
     const {id} = req.params;
@@ -64,7 +76,7 @@ app.get('/client', async(req,res) =>{
 //get client based off name
 app.get('/name/:searchName', async(req,res) =>{
   try {
-    let name = await Client.find({
+    let name = await Client.findOne({
       "$or":[
         {firstName:{$regex:req.params.searchName}},
         {lastName:{$regex:req.params.searchName}}
@@ -201,6 +213,41 @@ app.delete('/event/:id', async (req,res) =>{
       return res.status(404).json({message: `can not find event with ID ${id}`})
     }
     res.status(200).json(event)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+//User route
+app.post('/user' , async(req,res) =>{
+  try {
+    const user = await User.findOne({email: req.body.email})
+    if (user.password === req.body.password){
+      res.send("logged in")
+    }
+    
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+//Service route
+app.get('/service', async(req,res) =>{
+  try {
+    const service = await Service.find({})
+    res.status(200).json(service)
+  } catch (error) {
+    console.log(error.message);
+    res.status(500).json({message: error.message})
+  }
+})
+
+app.post('/service', async(req,res) =>{
+  try {
+    const service = await Service.create(req.body)
+    res.status(200).json(service)
   } catch (error) {
     console.log(error.message);
     res.status(500).json({message: error.message})

@@ -68,7 +68,7 @@ export default {
                 }
               } else {
                 axios
-                  .post(`${apiURL}/clients`, this.client)
+                  .post(`${apiURL}/client`, this.client)
                   .then(() => {
                     alert('Client added')
                     this.$router.push({ name: 'findclient' })

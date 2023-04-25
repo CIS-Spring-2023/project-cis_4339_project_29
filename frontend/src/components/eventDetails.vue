@@ -30,7 +30,7 @@ export default {
     }
   },
   created() {
-    axios.get(`${apiURL}/events/id/${this.$route.params.id}`).then((res) => {
+    axios.get(`${apiURL}/event/${this.$route.params.id}`).then((res) => {
       this.event = res.data
       this.event.date = this.formattedDate(this.event.date)
       this.event.attendees.forEach((e) => {
@@ -51,7 +51,7 @@ export default {
         .toISODate()
     },
     handleEventUpdate() {
-      axios.put(`${apiURL}/events/update/${this.id}`, this.event).then(() => {
+      axios.put(`${apiURL}/event/${this.id}`, this.event).then(() => {
         alert('Update has been saved.')
         this.$router.back()
       })
@@ -60,7 +60,7 @@ export default {
       this.$router.push({ name: 'updateclient', params: { id: clientID } })
     },
     eventDelete() {
-      axios.delete(`${apiURL}/events/${this.id}`).then(() => {
+      axios.delete(`${apiURL}/event/${this.id}`).then(() => {
         alert('Event has been deleted.')
         this.$router.push({ name: 'findevents' })
       })
