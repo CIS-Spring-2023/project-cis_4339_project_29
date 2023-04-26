@@ -44,11 +44,7 @@ const clientDataSchema = mongoose.Schema(
             type: String
           }
         },
-        orgs: {
-          type: [{ type: String, ref: 'org' }],
-          required: true,
-          validate: [(org) => org.length > 0, 'needs at least one org']
-        }
+        
       },
       {
         collection: 'client',
