@@ -49,7 +49,7 @@ export default {
       this.v$.$validate().then((valid) => {
         if (valid) {
           axios
-            .get(`${apiURL}/clients/lookup/${this.client.phoneNumber.primary}`)
+            .get(`${apiURL}/number/${this.client.phoneNumber.primary}`)
             .then((res) => {
               if (res.data) {
                 if (res.data.orgs.includes(this.org)) {
@@ -57,7 +57,7 @@ export default {
                   this.$router.push({ name: 'findclient' })
                 } else {
                   axios
-                    .put(`${apiURL}/clients/register/${res.data._id}`)
+                    .put(`${apiURL}/register/${res.data._id}`)
                     .then(() => {
                       alert('Client registered')
                       this.$router.push({ name: 'findclient' })

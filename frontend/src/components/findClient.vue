@@ -27,10 +27,11 @@ export default {
       if (this.searchBy === 'Client Name') {
         endpoint = `clients/search/?firstName=${this.firstName}&lastName=${this.lastName}&searchBy=name`
       } else if (this.searchBy === 'Client Number') {
-        endpoint = `clients/search/?phoneNumber.primary=${this.phoneNumber}&searchBy=number`
+        endpoint = `number/${this.phoneNumber}`
       }
       axios.get(`${apiURL}/${endpoint}`).then((res) => {
         this.queryData = res.data
+        .console.log(this.queryData);
       })
     },
     // abstract get clients call
