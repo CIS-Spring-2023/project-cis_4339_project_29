@@ -8,7 +8,7 @@
             Email
           </label>
           <input
-            v-model="email"
+            v-model="user.email"
             :class="{ 'border-red-500': !emailIsValid }"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="email"
@@ -25,7 +25,7 @@
             Password
           </label>
           <input
-            v-model="password"
+            v-model="user.password"
             :class="{ 'border-red-500': !passwordIsValid }"
             class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
             id="password"
@@ -63,10 +63,12 @@ const apiURL = import.meta.env.VITE_ROOT_API
 export default {
   data() {
     return {
+      user:{
       email: '',
       password: '',
       showErrorMessage: false,
-      errorMessage: '',
+      errorMessage: ''
+      }
     }
   },
   setup() {
@@ -77,11 +79,11 @@ export default {
     emailIsValid() {
       // This regular expression matches email addresses with basic validation
       const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-      return emailRegex.test(this.email)
+      return emailRegex.test(this.user.email)
     },
     passwordIsValid() {
       // Check if password is at least 8 characters long
-      return this.password.length >= 8
+      return this.user.password.length >= 8
     },
     formIsValid() {
       return this.emailIsValid && this.passwordIsValid
@@ -89,16 +91,22 @@ export default {
   },
   methods: {
     submitForm() {
+      axios.post(`${apiURL}/user`, this.user)
+    .then(() => {
+            alert('You are logged in!.')
+            this.$router.push( '/' )
+          })
+          .catch((error) => {
+            console.log(error)
+          })
       // Check email and password
-      if (this.email === 'user1234@gmail.com' && this.password === 'User1234') {
-        // Redirect to welcome page
-        this.$router.push('/') 
+      if (this.user.email === 'user1234@gmail.com' && this.user.password === 'User1234') {   
         return useAuthStore().isAuth = true
       }
-      else if(this.email === 'reader1234@gmail.com' && this.password === 'Reader1234') {
-        // Redirect to welcome page
-        this.$router.push('/') 
+      else if(this.user.email === 'reader1234@gmail.com' && this.user.password === 'Reader1234') {  
+        this.$router.push( '/' )
         return useAuthStore().isReader = true
+        
       } else {
     // Display error message when password is incorrect
     alert('Incorrect email or password.')
