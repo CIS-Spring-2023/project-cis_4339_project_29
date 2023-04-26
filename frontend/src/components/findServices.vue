@@ -44,6 +44,7 @@ export default {
       window.scrollTo(0, 0)
 
     },
+    
     clearSearch() {
       // Resets all the variables
       this.searchBy = ''

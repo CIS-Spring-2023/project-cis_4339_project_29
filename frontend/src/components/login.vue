@@ -58,6 +58,8 @@
 
 <script>
 import { useAuthStore } from "@/store/auth"
+import axios from 'axios'
+const apiURL = import.meta.env.VITE_ROOT_API
 export default {
   data() {
     return {

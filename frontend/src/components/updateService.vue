@@ -25,11 +25,11 @@ export default {
     }
   },
   created() {
-    //*For when BackEnd is implemented
-    // axios.get(`${apiURL}/services/id/${this.$route.params.id}`).then((res) => {
-    //   // simplified setting service
-    //   this.client = res.data
-    // })
+    
+    axios.get(`${apiURL}/service/${this.$route.params.id}`).then((res) => {
+      this.service = res.data
+      this.client = res.data
+     })
 
     //Test Data
     this.service = serviceData.testData[this.$route.params.id - 1]
@@ -45,7 +45,7 @@ export default {
       // If no errors found. isFormCorrect = True then the form is submitted
       if (isFormCorrect) {
         axios
-          .put(`${apiURL}/services/update/${this.id}`, this.service)
+          .put(`${apiURL}/service/${this.id}`, this.service)
           .then(() => {
             alert('Update has been saved.')
             this.$router.back()
