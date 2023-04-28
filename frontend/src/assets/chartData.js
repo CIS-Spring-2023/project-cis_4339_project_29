@@ -27,7 +27,7 @@ const clientModel = require('./models/client');
           res.status(500).send('An error occurred while fetching clients');
         } else {
           const labels = clients.map(client => client.zipCode);
-          const data = clients.map(client => client.coverage);
+          const data = clients.map(client => client.zipCode);
           const backgroundColor = [
             'rgb(255,99,132)',
             'rgb(54,162,235)',
