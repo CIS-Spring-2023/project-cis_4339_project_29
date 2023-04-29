@@ -75,34 +75,6 @@ app.get('/client', async(req,res) =>{
   }
 })
 
-// //get client based off name
-// app.get('/name/:searchName', async(req,res) =>{
-//   try {
-//     let name = await Client.findOne({
-//       "$or":[
-//         {firstName:{$regex:req.params.searchName}},
-//         {lastName:{$regex:req.params.searchName}}
-//       ]
-//     })
-//     res.status(200).json(name)
-//   } catch (error) {
-//     console.log(error.message);
-//     res.status(500).json({message: error.message})
-//   }
-// })
-
-// //get client based off phone number
-// app.get('/number/:phoneNumber', async(req,res) =>{
-//   try {
-//     const {phoneNumber} = req.params
-//     const number = await Client.findOne({'phoneNumber.primary': phoneNumber})
-//     res.status(200).json(number)
-//   } catch (error) {
-//     console.log(error.message);
-//     res.status(500).json({message: error.message})
-//   }
-// })
-
 // GET entries based on search query
 // Ex: '...?firstName=Bob&lastName=&searchBy=name'
 app.get('/client/search', (req, res, next) => {
@@ -309,6 +281,29 @@ app.get('/service', async(req,res) =>{
     console.log(error.message);
     res.status(500).json({message: error.message})
   }
+})
+
+// GET entries based on search query
+// Ex: '...?serviceName=Bob&searchBy=name'
+app.get('/service/search', (req, res, next) => {
+  const dbQuery = { orgs: process.env.ORG }
+  switch (req.query.searchBy) {
+    case 'name':
+      dbQuery.name = { $regex: `^${req.query.serviceName}`, $options: 'i' }
+      break
+    case 'provName':
+      dbQuery.provName = { $regex: `^${req.query.providerName}`, $options: 'i' }
+      break
+    default:
+      return res.status(400).send('invalid searchBy')
+  }
+  Service.find(dbQuery, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
 })
 
 app.get('/service/:id', async(req,res) =>{
