@@ -7,6 +7,7 @@ const Event = require('./models/eventModel')
 const User = require('./models/userModle')
 const Service = require('./models/servicesModel')
 
+
 const cors = require('cors')
 // allow using a .env file
 require('dotenv').config() //require the dotenv
@@ -64,6 +65,7 @@ app.get('/org/:id', async(req,res) =>{
 // Routes for Client
 //get all clients
 app.get('/client', async(req,res) =>{
+  console.log('Whoops')
   try {
     const client = await Client.find({})
     res.status(200).json(client)
@@ -73,32 +75,31 @@ app.get('/client', async(req,res) =>{
   }
 })
 
-//get client based off name
-app.get('/name/:searchName', async(req,res) =>{
-  try {
-    let name = await Client.findOne({
-      "$or":[
-        {firstName:{$regex:req.params.searchName}},
-        {lastName:{$regex:req.params.searchName}}
-      ]
-    })
-    res.status(200).json(name)
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({message: error.message})
+// GET entries based on search query
+// Ex: '...?firstName=Bob&lastName=&searchBy=name'
+app.get('/client/search', (req, res, next) => {
+  const dbQuery = { orgs: process.env.ORG }
+  switch (req.query.searchBy) {
+    case 'name':
+      dbQuery.firstName = { $regex: `^${req.query.firstName}`, $options: 'i' }
+      dbQuery.lastName = { $regex: `^${req.query.lastName}`, $options: 'i' }
+      break
+    case 'number':
+      dbQuery['phoneNumber.primary'] = {
+        $regex: `^${req.query['phoneNumber']}`,
+        $options: 'i'
+      }
+      break
+    default:
+      return res.status(400).send('invalid searchBy')
   }
-})
-
-//get client based off phone number
-app.get('/number/:phoneNumber', async(req,res) =>{
-  try {
-    const {phoneNumber} = req.params
-    const number = await Client.findOne({'phoneNumber.primary': phoneNumber})
-    res.status(200).json(number)
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({message: error.message})
-  }
+  Client.find(dbQuery, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
 })
 
 app.put('/register/:id', (req, res, next) => {
@@ -116,11 +117,8 @@ app.put('/register/:id', (req, res, next) => {
   )
 })
 
-
-
-
 //get client based off id
-app.get('/client/:id', async(req,res) =>{
+app.get('/client/id/:id', async(req,res) =>{
   try {
     const {id} = req.params;
     const client = await Client.findById(id);
@@ -183,6 +181,29 @@ app.get('/event', async(req,res) =>{
   }
 })
 
+// GET events based on search query
+// Ex: '...?name=Food&searchBy=name'
+app.get('/event/search/', (req, res, next) => {
+  const dbQuery = { org: process.env.ORG }
+  switch (req.query.searchBy) {
+    case 'name':
+      // match event name, no anchor
+      dbQuery.name = { $regex: `${req.query.name}`, $options: 'i' }
+      break
+    case 'date':
+      dbQuery.date = req.query.eventDate
+      break
+    default:
+      return res.status(400).send('invalid searchBy')
+  }
+  Event.find(dbQuery, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+})
 
 //get event by id
 app.get('/event/:id', async(req,res) =>{
@@ -244,7 +265,7 @@ app.post('/user' , async(req,res) =>{
     if (user.password === req.body.password){
       res.send("logged in")
     }
-    
+
   } catch (error) {
     console.log(error.message);
     res.status(500).json({message: error.message})
@@ -260,6 +281,29 @@ app.get('/service', async(req,res) =>{
     console.log(error.message);
     res.status(500).json({message: error.message})
   }
+})
+
+// GET entries based on search query
+// Ex: '...?serviceName=Bob&searchBy=name'
+app.get('/service/search', (req, res, next) => {
+  const dbQuery = { orgs: process.env.ORG }
+  switch (req.query.searchBy) {
+    case 'name':
+      dbQuery.name = { $regex: `^${req.query.serviceName}`, $options: 'i' }
+      break
+    case 'provName':
+      dbQuery.provName = { $regex: `^${req.query.providerName}`, $options: 'i' }
+      break
+    default:
+      return res.status(400).send('invalid searchBy')
+  }
+  Service.find(dbQuery, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
 })
 
 app.get('/service/:id', async(req,res) =>{

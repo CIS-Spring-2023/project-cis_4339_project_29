@@ -25,13 +25,13 @@ export default {
     handleSubmitForm() {
       let endpoint = ''
       if (this.searchBy === 'Client Name') {
-        endpoint = `clients/search/?firstName=${this.firstName}&lastName=${this.lastName}&searchBy=name`
+        endpoint = `client/search/?firstName=${this.firstName}&lastName=${this.lastName}&searchBy=name`
       } else if (this.searchBy === 'Client Number') {
-        endpoint = `number/${this.phoneNumber}`
+        endpoint = `client/search/?phoneNumber=${this.phoneNumber}&searchBy=number`
       }
       axios.get(`${apiURL}/${endpoint}`).then((res) => {
-        this.queryData = res.data
-        .console.log(this.queryData);
+        this.queryData = res.data;
+        console.log(this.queryData);
       })
     },
     // abstract get clients call

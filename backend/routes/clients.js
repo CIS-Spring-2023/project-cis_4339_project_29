@@ -37,6 +37,7 @@ router.get('/id/:id', (req, res, next) => {
 // GET entries based on search query
 // Ex: '...?firstName=Bob&lastName=&searchBy=name'
 router.get('/search', (req, res, next) => {
+  console.log('searching Clients')
   const dbQuery = { orgs: org }
   switch (req.query.searchBy) {
     case 'name':
@@ -56,7 +57,7 @@ router.get('/search', (req, res, next) => {
     if (error) {
       return next(error)
     } else {
-      res.json(data)
+      res.json({1: 'hello'})
     }
   })
 })

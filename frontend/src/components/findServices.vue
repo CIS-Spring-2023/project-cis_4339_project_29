@@ -24,11 +24,12 @@ export default {
   },
   methods: {
     handleSubmitForm() {
+      console.log('running', this.name, this.provName)
       let endpoint = ''
       if (this.searchBy === 'Service Name') {
-        endpoint = `services/search/?serviceName=${this.serviceName}&searchBy=name`
-      } else if (this.searchBy === 'providerName') {
-        endpoint = `services/search/?providerName=${this.providerName}&searchBy=provName`
+        endpoint = `service/search/?serviceName=${this.name}&searchBy=name`
+      } else if (this.searchBy === 'Provider Name') {
+        endpoint = `service/search/?providerName=${this.provName}&searchBy=provName`
       }
       axios.get(`${apiURL}/${endpoint}`).then((res) => {
         this.queryData = res.data
@@ -44,7 +45,7 @@ export default {
       window.scrollTo(0, 0)
 
     },
-    
+
     clearSearch() {
       // Resets all the variables
       this.searchBy = ''
@@ -89,7 +90,7 @@ export default {
             <input
               type="text"
               class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
-              v-model="firstName"
+              v-model="name"
               v-on:keyup.enter="handleSubmitForm"
               placeholder="Enter Service name"
             />
@@ -100,7 +101,7 @@ export default {
           <input
             class="w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
             type="text"
-            v-model="phoneNumber"
+            v-model="provName"
             v-on:keyup.enter="handleSubmitForm"
             placeholder="Enter Provider Name"
           />
