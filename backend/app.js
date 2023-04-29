@@ -209,6 +209,29 @@ app.get('/event', async(req,res) =>{
   }
 })
 
+// GET events based on search query
+// Ex: '...?name=Food&searchBy=name'
+app.get('/event/search/', (req, res, next) => {
+  const dbQuery = { org: process.env.ORG }
+  switch (req.query.searchBy) {
+    case 'name':
+      // match event name, no anchor
+      dbQuery.name = { $regex: `${req.query.name}`, $options: 'i' }
+      break
+    case 'date':
+      dbQuery.date = req.query.eventDate
+      break
+    default:
+      return res.status(400).send('invalid searchBy')
+  }
+  Event.find(dbQuery, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+})
 
 //get event by id
 app.get('/event/:id', async(req,res) =>{

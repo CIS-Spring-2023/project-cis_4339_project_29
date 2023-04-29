@@ -34,9 +34,9 @@ export default {
     handleSubmitForm() {
       let endpoint = ''
       if (this.searchBy === 'Event Name') {
-        endpoint = `events/search/?name=${this.name}&searchBy=name`
+        endpoint = `event/search/?name=${this.name}&searchBy=name`
       } else if (this.searchBy === 'Event Date') {
-        endpoint = `events/search/?eventDate=${this.eventDate}&searchBy=date`
+        endpoint = `event/search/?eventDate=${this.eventDate}&searchBy=date`
       }
       axios.get(`${apiURL}/${endpoint}`).then((res) => {
         this.events = res.data
