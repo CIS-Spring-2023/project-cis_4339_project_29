@@ -7,6 +7,7 @@ const Event = require('./models/eventModel')
 const User = require('./models/userModle')
 const Service = require('./models/servicesModel')
 
+
 const cors = require('cors')
 // allow using a .env file
 require('dotenv').config() //require the dotenv
@@ -64,6 +65,7 @@ app.get('/org/:id', async(req,res) =>{
 // Routes for Client
 //get all clients
 app.get('/client', async(req,res) =>{
+  console.log('Whoops')
   try {
     const client = await Client.find({})
     res.status(200).json(client)
@@ -73,32 +75,60 @@ app.get('/client', async(req,res) =>{
   }
 })
 
-//get client based off name
-app.get('/name/:searchName', async(req,res) =>{
-  try {
-    let name = await Client.findOne({
-      "$or":[
-        {firstName:{$regex:req.params.searchName}},
-        {lastName:{$regex:req.params.searchName}}
-      ]
-    })
-    res.status(200).json(name)
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({message: error.message})
-  }
-})
+// //get client based off name
+// app.get('/name/:searchName', async(req,res) =>{
+//   try {
+//     let name = await Client.findOne({
+//       "$or":[
+//         {firstName:{$regex:req.params.searchName}},
+//         {lastName:{$regex:req.params.searchName}}
+//       ]
+//     })
+//     res.status(200).json(name)
+//   } catch (error) {
+//     console.log(error.message);
+//     res.status(500).json({message: error.message})
+//   }
+// })
 
-//get client based off phone number
-app.get('/number/:phoneNumber', async(req,res) =>{
-  try {
-    const {phoneNumber} = req.params
-    const number = await Client.findOne({'phoneNumber.primary': phoneNumber})
-    res.status(200).json(number)
-  } catch (error) {
-    console.log(error.message);
-    res.status(500).json({message: error.message})
+// //get client based off phone number
+// app.get('/number/:phoneNumber', async(req,res) =>{
+//   try {
+//     const {phoneNumber} = req.params
+//     const number = await Client.findOne({'phoneNumber.primary': phoneNumber})
+//     res.status(200).json(number)
+//   } catch (error) {
+//     console.log(error.message);
+//     res.status(500).json({message: error.message})
+//   }
+// })
+
+// GET entries based on search query
+// Ex: '...?firstName=Bob&lastName=&searchBy=name'
+app.get('/client/search', (req, res, next) => {
+  console.log('searching Clients')
+  const dbQuery = { orgs: process.env.ORG }
+  switch (req.query.searchBy) {
+    case 'name':
+      dbQuery.firstName = { $regex: `^${req.query.firstName}`, $options: 'i' }
+      dbQuery.lastName = { $regex: `^${req.query.lastName}`, $options: 'i' }
+      break
+    case 'number':
+      dbQuery['phoneNumber.primary'] = {
+        $regex: `^${req.query['phoneNumber.primary']}`,
+        $options: 'i'
+      }
+      break
+    default:
+      return res.status(400).send('invalid searchBy')
   }
+  Client.find(dbQuery, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
 })
 
 app.put('/register/:id', (req, res, next) => {
@@ -116,19 +146,16 @@ app.put('/register/:id', (req, res, next) => {
   )
 })
 
-
-
-
-//get client based off id
-app.get('/client/:id', async(req,res) =>{
-  try {
-    const {id} = req.params;
-    const client = await Client.findById(id);
-    res.status(200).json(client)
-  } catch (error) {
-    res.status(500).json({message: error.message})
-  }
-})
+// //get client based off id
+// app.get('/client/id/:id', async(req,res) =>{
+//   try {
+//     const {id} = req.params;
+//     const client = await Client.findById(id);
+//     res.status(200).json(client)
+//   } catch (error) {
+//     res.status(500).json({message: error.message})
+//   }
+// })
 
 //post client
 app.post('/client', async(req,res) =>{
@@ -244,7 +271,7 @@ app.post('/user' , async(req,res) =>{
     if (user.password === req.body.password){
       res.send("logged in")
     }
-    
+
   } catch (error) {
     console.log(error.message);
     res.status(500).json({message: error.message})
