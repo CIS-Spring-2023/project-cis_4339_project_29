@@ -27,7 +27,7 @@ export default {
       if (this.searchBy === 'Client Name') {
         endpoint = `client/search/?firstName=${this.firstName}&lastName=${this.lastName}&searchBy=name`
       } else if (this.searchBy === 'Client Number') {
-        endpoint = `number/${this.phoneNumber}`
+        endpoint = `client/search/?phoneNumber=${this.phoneNumber}&searchBy=number`
       }
       console.log('getting')
       axios.get(`${apiURL}/${endpoint}`).then((res) => {

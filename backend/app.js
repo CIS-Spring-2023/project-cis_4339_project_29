@@ -106,7 +106,6 @@ app.get('/client', async(req,res) =>{
 // GET entries based on search query
 // Ex: '...?firstName=Bob&lastName=&searchBy=name'
 app.get('/client/search', (req, res, next) => {
-  console.log('searching Clients')
   const dbQuery = { orgs: process.env.ORG }
   switch (req.query.searchBy) {
     case 'name':
@@ -115,7 +114,7 @@ app.get('/client/search', (req, res, next) => {
       break
     case 'number':
       dbQuery['phoneNumber.primary'] = {
-        $regex: `^${req.query['phoneNumber.primary']}`,
+        $regex: `^${req.query['phoneNumber']}`,
         $options: 'i'
       }
       break
@@ -146,16 +145,16 @@ app.put('/register/:id', (req, res, next) => {
   )
 })
 
-// //get client based off id
-// app.get('/client/id/:id', async(req,res) =>{
-//   try {
-//     const {id} = req.params;
-//     const client = await Client.findById(id);
-//     res.status(200).json(client)
-//   } catch (error) {
-//     res.status(500).json({message: error.message})
-//   }
-// })
+//get client based off id
+app.get('/client/id/:id', async(req,res) =>{
+  try {
+    const {id} = req.params;
+    const client = await Client.findById(id);
+    res.status(200).json(client)
+  } catch (error) {
+    res.status(500).json({message: error.message})
+  }
+})
 
 //post client
 app.post('/client', async(req,res) =>{
