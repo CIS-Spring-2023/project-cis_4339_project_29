@@ -67,7 +67,7 @@ export default {
     },
     getEventsRegistered() {
       axios
-        .get(`${apiURL}/events/client/${this.$route.params.id}`)
+        .get(`${apiURL}/client/${this.$route.params.id}`)
         .then((res) => {
           // simplified setting eventsRegistered
           this.eventsRegistered = res.data
