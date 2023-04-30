@@ -34,7 +34,7 @@ export default {
       this.event = res.data
       this.event.date = this.formattedDate(this.event.date)
       this.event.attendees.forEach((e) => {
-        axios.get(`${apiURL}/clients/id/${e}`).then((res) => {
+        axios.get(`${apiURL}/client/${e}`).then((res) => {
           this.clientAttendees.push(res.data)
         })
       })
