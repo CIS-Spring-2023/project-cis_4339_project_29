@@ -41,8 +41,9 @@ export default {
     axios.get(`${apiURL}/client/${this.$route.params.id}`).then((res) => {
       // simplified setting client
       this.client = res.data
+      console.log(res.data)
     })
-    axios.get(`${apiURL}/events`).then((res) => {
+    axios.get(`${apiURL}/event`).then((res) => {
       // simplified setting eventsAll
       this.eventsAll = res.data
     })
@@ -88,7 +89,7 @@ export default {
     addToEvent() {
       this.eventsSelected.forEach((event) => {
         axios
-          .put(`${apiURL}/events/register`, null, {
+          .put(`${apiURL}/event/register`, null, {
             params: { event: event._id, client: this.id }
           })
           .then(() => this.getEventsRegistered())

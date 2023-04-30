@@ -118,7 +118,7 @@ app.put('/register/:id', (req, res, next) => {
 })
 
 //get client based off id
-app.get('/client/id/:id', async(req,res) =>{
+app.get('/client/:id', async(req,res) =>{
   try {
     const {id} = req.params;
     const client = await Client.findById(id);
@@ -241,6 +241,52 @@ app.put('/event/:id', async(req,res) => {
     console.log(error.message);
     res.status(500).json({message: error.message})
   }
+})
+
+
+
+//Get attendace
+app.get('/attendance', (req, res, next) => {
+  const twoMonthsAgo = new Date()
+  twoMonthsAgo.setMonth(twoMonthsAgo.getMonth() - 2)
+  Event
+    .find({ org: Org, date: { $gte: twoMonthsAgo } }, (error, data) => {
+      if (error) {
+        return next(error)
+      } else {
+        res.json(data)
+      }
+    })
+    .sort({ date: 1 })
+})
+//register a client for an event
+app.put('/event/register', (req, res, next) => {
+  Event.find(
+    { _id: req.query.event, attendees: req.query.client },
+    (error, data) => {
+      if (error) {
+        return next(error)
+      } else {
+        // only add attendee if not yet signed up
+        if (!data.length) {
+          Event.findByIdAndUpdate(
+            req.query.event(),
+            { $push: { attendees: req.query.client } },
+            (error, data) => {
+              if (error) {
+                console.log(error)
+                return next(error)
+              } else {
+                res.send('Client added to event')
+              }
+            }
+          )
+        } else {
+          res.status(400).send('Client already added to event')
+        }
+      }
+    }
+  )
 })
 
 //delete event
