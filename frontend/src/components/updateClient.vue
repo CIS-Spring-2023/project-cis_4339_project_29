@@ -41,6 +41,7 @@ export default {
     axios.get(`${apiURL}/client/${this.$route.params.id}`).then((res) => {
       // simplified setting client
       this.client = res.data
+      
       console.log(res.data)
     })
     axios.get(`${apiURL}/event`).then((res) => {
@@ -66,12 +67,14 @@ export default {
       return `${name} (${this.formattedDate(date)})`
     },
     getEventsRegistered() {
-      axios
-        .get(`${apiURL}/client/${this.$route.params.id}`)
-        .then((res) => {
+      axios.get(`${apiURL}/event/client/${this.$route.params.id}`).then((res) =>
+        {
           // simplified setting eventsRegistered
           this.eventsRegistered = res.data
-        })
+          console.log(this.eventsRegistered)     
+    })
+         console.log(this.eventsRegistered)
+        
     },
     async updateClient() {
       // Checks to see if there are any errors in validation

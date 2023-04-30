@@ -170,6 +170,16 @@ app.delete('/client/:id', async(req,res) =>{
   }
 })
 
+app.get('/event/client/:id', (req, res, next) => {
+  Event.find({ attendees: req.params.id, org: process.env.ORG }, (error, data) => {
+    if (error) {
+      return next(error)
+    } else {
+      res.json(data)
+    }
+  })
+})
+
 // routes for events
 app.get('/event', async(req,res) =>{
   try {
