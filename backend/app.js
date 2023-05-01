@@ -103,6 +103,21 @@ app.get('/client/search', (req, res, next) => {
   })
 })
 
+app.put('/deregister/:id', (req, res, next) => {
+  Client.findByIdAndUpdate(
+    req.params.id,
+    { $pull: { orgs: process.env.ORG } },
+    (error, data) => {
+      if (error) {
+        console.log(error)
+        return next(error)
+      } else {
+        res.send('Client deregistered with org')
+      }
+    }
+  )
+})
+//register a client for an org
 app.put('/register/:id', (req, res, next) => {
   Client.findByIdAndUpdate(
     req.params.id,
@@ -171,6 +186,7 @@ app.delete('/client/:id', async(req,res) =>{
   }
 })
 
+//get events for client
 app.get('/event/client/:id', (req, res, next) => {
   Event.find({ attendees: req.params.id, org: process.env.ORG }, (error, data) => {
     if (error) {
