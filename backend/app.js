@@ -240,7 +240,7 @@ app.post('/event', async(req,res) =>{
 })
 
 //update event
-app.put('/event/:id', async(req,res) => {
+app.put('/event/id/:id', async(req,res) => {
   try {
     const {id} = req.params;
     const event = await Event.findByIdAndUpdate(id, req.body)
@@ -270,35 +270,65 @@ app.get('/attendance', (req, res, next) => {
     })
     .sort({ date: 1 })
 })
-//register a client for an event
+// //register a client for an event
+// app.put('/event/register', (req, res, next) => {
+//   Event.find(
+//     { _id: req.query.event, attendees: req.query.client },
+//     (error, data) => {
+//       if (error) {
+//         return next(error)
+//       } else {
+//         // only add attendee if not yet signed up
+//         if (!data.length) {
+//           Event.findByIdAndUpdate(
+//             req.query.event(),
+//             { $push: { attendees: req.query.client } },
+//             (error, data) => {
+//               if (error) {
+//                 console.log(error)
+//                 return next(error)
+//               } else {
+//                 res.send('Client added to event')
+//               }
+//             }
+//           )
+//         } else {
+//           res.status(400).send('Client already added to event')
+//         }
+//       }
+//     }
+//   )
+// })
+
 app.put('/event/register', (req, res, next) => {
-  Event.find(
-    { _id: req.query.event, attendees: req.query.client },
-    (error, data) => {
-      if (error) {
-        return next(error)
-      } else {
-        // only add attendee if not yet signed up
-        if (!data.length) {
-          Event.findByIdAndUpdate(
-            req.query.event(),
-            { $push: { attendees: req.query.client } },
-            (error, data) => {
-              if (error) {
-                console.log(error)
-                return next(error)
-              } else {
-                res.send('Client added to event')
-              }
-            }
-          )
+  console.log('hello', req.query)
+    Event.find(
+      { _id: req.query.event, attendees: req.query.client },
+      (error, data) => {
+        if (error) {
+          return next(error)
         } else {
-          res.status(400).send('Client already added to event')
+          // only add attendee if not yet signed up
+          if (!data.length) {
+            Event.findByIdAndUpdate(
+              req.query.event,
+              { $push: { attendees: req.query.client } },
+              (error, data) => {
+                if (error) {
+                  console.log(error)
+                  return next(error)
+                } else {
+                  res.send('Client added to event')
+                }
+              }
+            )
+          } else {
+            res.status(400).send('Client already added to event')
+          }
         }
       }
-    }
-  )
-})
+    )
+  })
 
 //delete event
 app.delete('/event/:id', async (req,res) =>{
