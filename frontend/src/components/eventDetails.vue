@@ -53,7 +53,7 @@ export default {
         .toISODate()
     },
     handleEventUpdate() {
-      axios.put(`${apiURL}/event/${this.id}`, this.event).then(() => {
+      axios.put(`${apiURL}/event/id/${this.id}`, this.event).then(() => {
         alert('Update has been saved.')
         this.$router.back()
       })
