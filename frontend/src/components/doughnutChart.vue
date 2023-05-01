@@ -10,6 +10,24 @@
 import { Chart, registerables } from 'chart.js'
 import doughnutchartData from '../assets/chartData.js'
 
+export default {
+  data() {
+    return {
+      queryData: [],
+      // Parameter for search to occur
+      zipCode: '',
+    }
+  },
+  setup() {
+    const authStore = useAuthStore();
+    return { authStore };
+  },
+  created() {
+    this.getClients()
+  },
+  methods: {}
+  
+  
 Chart.register(...registerables);
 export default {
   name: 'doughnutChart',
