@@ -1,4 +1,5 @@
 # Data Platform Project Setup
+POSTMAN DOCUMENTATION = https://documenter.getpostman.com/view/23532123/2s93eSab5o
 
 This project has been developed over time by students in the CIS 4339 course.
 
