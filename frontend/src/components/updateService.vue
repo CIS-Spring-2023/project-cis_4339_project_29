@@ -25,9 +25,10 @@ export default {
     }
   },
   created() {
-    
+
     axios.get(`${apiURL}/service/${this.$route.params.id}`).then((res) => {
       this.service = res.data
+      console.log(this.service)
       this.client = res.data
      })
 

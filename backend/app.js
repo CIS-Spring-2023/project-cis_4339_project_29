@@ -65,7 +65,6 @@ app.get('/org/:id', async(req,res) =>{
 // Routes for Client
 //get all clients
 app.get('/client', async(req,res) =>{
-  console.log('Whoops')
   try {
     const client = await Client.find({})
     res.status(200).json(client)
@@ -78,7 +77,8 @@ app.get('/client', async(req,res) =>{
 // GET entries based on search query
 // Ex: '...?firstName=Bob&lastName=&searchBy=name'
 app.get('/client/search', (req, res, next) => {
-  const dbQuery = { orgs: process.env.ORG }
+  console.log('searching')
+  const dbQuery = {}
   switch (req.query.searchBy) {
     case 'name':
       dbQuery.firstName = { $regex: `^${req.query.firstName}`, $options: 'i' }
@@ -97,6 +97,7 @@ app.get('/client/search', (req, res, next) => {
     if (error) {
       return next(error)
     } else {
+      console.log('working')
       res.json(data)
     }
   })
@@ -194,7 +195,7 @@ app.get('/event', async(req,res) =>{
 // GET events based on search query
 // Ex: '...?name=Food&searchBy=name'
 app.get('/event/search/', (req, res, next) => {
-  const dbQuery = { org: process.env.ORG }
+  const dbQuery = {}
   switch (req.query.searchBy) {
     case 'name':
       // match event name, no anchor
@@ -239,7 +240,7 @@ app.post('/event', async(req,res) =>{
 })
 
 //update event
-app.put('/event/:id', async(req,res) => {
+app.put('/event/id/:id', async(req,res) => {
   try {
     const {id} = req.params;
     const event = await Event.findByIdAndUpdate(id, req.body)
@@ -269,35 +270,65 @@ app.get('/attendance', (req, res, next) => {
     })
     .sort({ date: 1 })
 })
-//register a client for an event
+// //register a client for an event
+// app.put('/event/register', (req, res, next) => {
+//   Event.find(
+//     { _id: req.query.event, attendees: req.query.client },
+//     (error, data) => {
+//       if (error) {
+//         return next(error)
+//       } else {
+//         // only add attendee if not yet signed up
+//         if (!data.length) {
+//           Event.findByIdAndUpdate(
+//             req.query.event(),
+//             { $push: { attendees: req.query.client } },
+//             (error, data) => {
+//               if (error) {
+//                 console.log(error)
+//                 return next(error)
+//               } else {
+//                 res.send('Client added to event')
+//               }
+//             }
+//           )
+//         } else {
+//           res.status(400).send('Client already added to event')
+//         }
+//       }
+//     }
+//   )
+// })
+
 app.put('/event/register', (req, res, next) => {
-  Event.find(
-    { _id: req.query.event, attendees: req.query.client },
-    (error, data) => {
-      if (error) {
-        return next(error)
-      } else {
-        // only add attendee if not yet signed up
-        if (!data.length) {
-          Event.findByIdAndUpdate(
-            req.query.event(),
-            { $push: { attendees: req.query.client } },
-            (error, data) => {
-              if (error) {
-                console.log(error)
-                return next(error)
-              } else {
-                res.send('Client added to event')
-              }
-            }
-          )
+  console.log('hello', req.query)
+    Event.find(
+      { _id: req.query.event, attendees: req.query.client },
+      (error, data) => {
+        if (error) {
+          return next(error)
         } else {
-          res.status(400).send('Client already added to event')
+          // only add attendee if not yet signed up
+          if (!data.length) {
+            Event.findByIdAndUpdate(
+              req.query.event,
+              { $push: { attendees: req.query.client } },
+              (error, data) => {
+                if (error) {
+                  console.log(error)
+                  return next(error)
+                } else {
+                  res.send('Client added to event')
+                }
+              }
+            )
+          } else {
+            res.status(400).send('Client already added to event')
+          }
         }
       }
-    }
-  )
-})
+    )
+  })
 
 //delete event
 app.delete('/event/:id', async (req,res) =>{
@@ -353,7 +384,7 @@ app.get('/service/active', async(req,res) =>{
 // GET entries based on search query
 // Ex: '...?serviceName=Bob&searchBy=name'
 app.get('/service/search', (req, res, next) => {
-  const dbQuery = { orgs: process.env.ORG }
+  const dbQuery = {}
   switch (req.query.searchBy) {
     case 'name':
       dbQuery.name = { $regex: `^${req.query.serviceName}`, $options: 'i' }
