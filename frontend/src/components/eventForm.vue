@@ -24,7 +24,8 @@ export default {
           zip: ''
         },
         description: ''
-      }
+      },
+      queryData: []
     }
   },
   created() {
@@ -48,11 +49,11 @@ export default {
       }
     },
     getServices() {
-      //* Once Backend is implemented
-      // axios.get(`${apiURL}/services/active`).then((res) => {
-      //   this.queryData = res.data
-      // })
-      this.queryData = serviceData.testData
+      //Once Backend is implemented
+      axios.get(`${apiURL}/service/active`).then((res) => {
+        console.log(res.data)
+        this.queryData = res.data
+      })
       window.scrollTo(0, 0)
     }
   },
