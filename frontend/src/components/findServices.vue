@@ -24,7 +24,6 @@ export default {
   },
   methods: {
     handleSubmitForm() {
-      console.log('running', this.name, this.provName)
       let endpoint = ''
       if (this.searchBy === 'Service Name') {
         endpoint = `service/search/?serviceName=${this.name}&searchBy=name`
@@ -41,7 +40,6 @@ export default {
        axios.get(`${apiURL}/service`).then((res) => {
        this.queryData = res.data
        })
-      this.queryData = serviceData.testData;
       window.scrollTo(0, 0)
 
     },

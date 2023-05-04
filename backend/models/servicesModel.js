@@ -15,7 +15,7 @@ const serviceSchema = mongoose.Schema(
             type: String
         },
         active:{
-          type: String,
+          type: Boolean,
           required:false
         }
     },

@@ -119,7 +119,7 @@ export default {
           })
         })
         .finally(
-          axios.put(`${apiURL}/clients/deregister/${this.id}`).then(() => {
+          axios.put(`${apiURL}/deregister/${this.id}`).then(() => {
             alert('Client has been deleted.')
             this.$router.push({ name: 'findclient' })
           })

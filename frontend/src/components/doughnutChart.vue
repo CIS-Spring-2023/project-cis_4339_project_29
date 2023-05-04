@@ -10,6 +10,7 @@
 import { Chart, registerables } from 'chart.js'
 import doughnutchartData from '../assets/chartData.js'
 
+
 Chart.register(...registerables);
 export default {
   name: 'doughnutChart',
